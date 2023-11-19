@@ -1,0 +1,3 @@
+[submodule "libraries/ADXL357"]
+	path = libraries/ADXL357
+	url = git@github.com:Chimera-PRIUS-Avionics/ADXL357.git
