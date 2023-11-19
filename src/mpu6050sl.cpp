@@ -1,5 +1,10 @@
 #include "mpu6050sl.h"
 
+#include "I2Cdev.h"
+#include "MPU6050.h"
+
+MPU6050* mpu6050;
+
 // Arduino Wire library is required if I2Cdev I2CDEV_ARDUINO_WIRE implementation
 // is used in I2Cdev.h
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
@@ -39,6 +44,5 @@ void setupFunctionMpu6050(){
     #endif
 
     mpu6050 = new MPU6050();
-    mpu6050->setRange(static_cast<adxl357_range_t>(Range));
     mpu6050->initialize();
 }

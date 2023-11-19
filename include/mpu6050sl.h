@@ -3,15 +3,19 @@
 
 #if !( defined(MATLAB_MEX_FILE) || defined(RSIM_PARAMETER_LOADING) ||  defined(RSIM_WITH_SL_SOLVER))
 
-#include "I2Cdev.h"
-#include "MPU6050.h"
-
 #include "rtwtypes.h"
 
-MPU6050* mpu6050;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-extern "C" void stepFunctionMpu6050(float* axf, float* ayf, float* azf, float* gxf, float* gyf, float* gzf);
-extern "C" void setupFunctionMpu6050();
+
+void stepFunctionMpu6050(float* axf, float* ayf, float* azf, float* gxf, float* gyf, float* gzf);
+void setupFunctionMpu6050();
+
+#ifdef __cplusplus
+}
+#endif
 
 #else
 #define stepFunctionMpu6050(float* , float*, float*) (0)

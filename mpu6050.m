@@ -2,9 +2,6 @@ classdef mpu6050 < matlab.System ...
     & coder.ExternalDependency ...
     & matlabshared.sensors.simulink.internal.BlockSampleTime
 
-% Measure accleration
-%#codegen
-%#ok<*EMCA>
 
 properties (Access = private)
 
@@ -44,7 +41,7 @@ methods (Access=protected)
         gy = single(0);
         gz = single(0);
         if isempty(coder.target)
-            x=3;
+
         else
             coder.ceval('stepFunctionMpu6050', ...
                 coder.ref(ax), ...
@@ -122,6 +119,9 @@ methods (Access=protected)
         varargout{1} = 'single';
         varargout{2} = 'single';
         varargout{3} = 'single';
+        varargout{4} = 'single';
+        varargout{5} = 'single';
+        varargout{6} = 'single';
     end
 
     function maskDisplayCmds = getMaskDisplayImpl(obj)
@@ -143,13 +143,12 @@ methods (Access=protected)
                 inport_label = [inport_label 'port_label(''input'',' num2str(i) ',''' inputs{i} ''');' ]; %#ok<AGROW>
             end
         end
-        icon = 'adxl357';
+        icon = 'mpu6050';
         maskDisplayCmds = [ ...
             ['color(''white'');',...
             'plot([100,100,100,100]*1,[100,100,100,100]*1);',...
             'plot([100,100,100,100]*0,[100,100,100,100]*0);',...
             'color(''blue'');', ...
-            ['text(38, 92, ','''',obj.Logo,'''',',''horizontalAlignment'', ''right'');',newline],...
             'color(''black'');'], ...
             ['text(52,50,' [''' ' icon ''',''horizontalAlignment'',''center'');' newline]]   ...
             inport_label ...
@@ -217,6 +216,7 @@ methods (Static)
         buildInfo.addIncludePaths(includeDir);
         
         addSourceFiles(buildInfo,'MPU6050.cpp',libDir);
+        addSourceFiles(buildInfo,'I2Cdev.cpp',libDir);
         addSourceFiles(buildInfo,'mpu6050sl.cpp',srcDir);
 
     end
