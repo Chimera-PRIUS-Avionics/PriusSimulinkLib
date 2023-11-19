@@ -15,6 +15,12 @@ methods
     end
 end
 
+methods (Access=private)
+    function [dout] = noise(freq)
+        dout = 40e-6 / sqrt(freq) * rand();
+    end
+end
+
 methods (Access=protected)
     function setupImpl(obj)
         if ~coder.target('MATLAB')
@@ -32,7 +38,7 @@ methods (Access=protected)
         end
     end
 
-    function [ax,ay,az, gx, gy, gz] = stepImpl(obj)
+    function [ax,ay,az, gx, gy, gz] = stepImpl(obj, sim_ax, sim_ay, sim_az)
         ax = single(0);
         ay = single(0);
         az = single(0);
@@ -41,7 +47,9 @@ methods (Access=protected)
         gy = single(0);
         gz = single(0);
         if isempty(coder.target)
-
+            ax = sim_ax + noise(1000);
+            ay = sim_ay + noise(1000);
+            az = sim_az + noise(1000);
         else
             coder.ceval('stepFunctionMpu6050', ...
                 coder.ref(ax), ...
@@ -64,7 +72,7 @@ end
 methods (Access=protected)
     %% Define output properties
     function num = getNumInputsImpl(~)
-        num = 0;
+        num = 3;
     end
 
     function num = getNumOutputsImpl(~)
@@ -72,7 +80,9 @@ methods (Access=protected)
     end
 
     function varargout = getInputNamesImpl(obj)
-
+        varargout{1} = 'sim_ax';
+        varargout{2} = 'sim_yx';
+        varargout{3} = 'sim_zx';
     end
 
     function varargout = getOutputNamesImpl(obj)
