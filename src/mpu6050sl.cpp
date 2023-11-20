@@ -19,9 +19,15 @@ void stepFunctionMpu6050(float* axf, float* ayf, float* azf, float* gxf, float* 
     int16_t gx, gy, gz;
     mpu6050->getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
 
-    *axf = static_cast<float>(ax) / 16384;
-    *ayf = static_cast<float>(ay) / 16384;
-    *azf = static_cast<float>(az) / 16384;
+    *axf = ((float)ax) / 16384 * 9.80665;
+    *ayf = ((float)ay) / 16384 * 9.80665;
+    *azf = ((float)az) / 16384 * 9.80665;
+
+    // *axf = ax;
+    // *ayf = ay;
+    // *azf = az;
+
+
     *gxf = gx;
     *gyf = gy;
     *gzf = gz;

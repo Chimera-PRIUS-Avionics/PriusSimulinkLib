@@ -16,7 +16,7 @@ methods
 end
 
 methods (Access=private)
-    function [dout] = noise(freq)
+    function [dout] = noise(obj, freq)
         dout = 40e-6 / sqrt(freq) * rand();
     end
 end
@@ -46,10 +46,10 @@ methods (Access=protected)
         gx = single(0);
         gy = single(0);
         gz = single(0);
-        if isempty(coder.target)
-            ax = sim_ax + noise(1000);
-            ay = sim_ay + noise(1000);
-            az = sim_az + noise(1000);
+        if coder.target('MATLAB')
+            % ax = sim_ax + obj.noise(1000);
+            % ay = sim_ay + obj.noise(1000);
+            % az = sim_az + obj.noise(1000);
         else
             coder.ceval('stepFunctionMpu6050', ...
                 coder.ref(ax), ...
@@ -58,7 +58,7 @@ methods (Access=protected)
                 coder.ref(gx), ...
                 coder.ref(gy), ...
                 coder.ref(gz));
-    end
+        end
     end
 
     function releaseImpl(obj)
